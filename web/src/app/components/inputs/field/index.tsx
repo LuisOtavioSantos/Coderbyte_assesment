@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { ContactsContext } from '../../contexts/contacts';
 import { InputFieldContext } from '../../contexts/input';
 
 interface Children { 
@@ -9,22 +10,19 @@ interface Children {
 
 
 export const InputField: React.FC<Children> = ({ children }) => {
-  const [contacts, setContacts] = useState([
-    { name: 'Luis', number: '123456789' },
-    { name: 'Bruna', number: '987654321' },
-    { name: 'Nenem', number: '456789123' },
-  ]);
-
+  const { contacts } = useContext(ContactsContext);
   const [search, setSearch] = useState('');
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(search.toLowerCase())
-  ); 
+  const filteredContacts = search
+    ? contacts.filter(contact =>
+        contact.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : contacts;
 
   return (
     <React.Fragment>
-      <InputFieldContext.Provider value={{ filteredContacts, setFilteredContacts: setContacts }}>
-        <div className="flex flex-col bg-white p-3">
+      <InputFieldContext.Provider value={{ filteredContacts }}>
+        <div className="flex flex-col border-2 border-solid bg-transparent mt-[2rem] mb-[2rem] bg-white p-4">
           <div className="flex flex-row">
             <div className="flex items-center pointer-events-none text-gray-400"> 
               <FaSearch />
@@ -32,12 +30,15 @@ export const InputField: React.FC<Children> = ({ children }) => {
       
             <input
               type="tel"
-              className="bg-transparent ml-2"
+              className="bg-transparent ml-2 w-full"
               placeholder="Search for contact by last name..."
               value={search}
-              onChange={e => setSearch(e.target.value)} // Update search input value
+              onChange={e => setSearch(e.target.value)}
             />
           </div>
+        </div>
+
+        <div className="flex flex-col bg-white p-3">
           {children}
         </div>
       </InputFieldContext.Provider>

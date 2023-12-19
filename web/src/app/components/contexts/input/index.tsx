@@ -8,10 +8,10 @@ interface Contact {
 
 interface InputFieldContextProps {
   filteredContacts: Contact[];
-  setFilteredContacts: (contacts: Contact[]) => void;
+  // setFilteredContacts: (contacts: Contact[]) => void;
 }
 
 export const InputFieldContext = React.createContext<InputFieldContextProps>({
   filteredContacts: [],
-  setFilteredContacts: () => {},
+  // setFilteredContacts: () => {},
 });
